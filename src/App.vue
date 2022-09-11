@@ -1,16 +1,24 @@
 <template>
   <div id="app">
-    <div class="test">
-      12
-    </div>
+    <Header></Header>
+    <Tabbar></Tabbar>
+    <router-view></router-view>
   </div>
 </template>
+<script>
+import Header from './components/Header'
+import Tabbar from './components/Tabbar'
+
+export default {
+  name: 'App',
+  components: {
+    Header,
+    Tabbar
+  }
+
+}
+</script>
 
 <style lang="scss" scoped>
-.test {
-  width: 750px;
-  height: 100px;
-  background-color: red;
-  transform: translate(0, 0);
-}
+
 </style>

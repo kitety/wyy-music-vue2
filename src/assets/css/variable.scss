@@ -3,3 +3,46 @@ $font_small: 12Px;
 $font_medium_s: 13Px;
 $font_medium: 15Px;
 $font_large: 17Px;
+
+//背景颜色规范（主要）
+//背景主题颜色默认（网易红）
+$background-color-theme: #d43c33;
+// 背景主题颜色1（QQ绿）
+$background-color-theme1: rgba(34, 213, 156, 1);
+// 背景主题颜色2（夜间模式）
+$background-color-theme2: #333;
+
+
+//背景颜色规范（次要）
+//背景主题颜色默认（网易红）
+$background-color-sub-theme: #f5f5f5;
+//背景主题颜色1（QQ绿）
+$background-color-sub-theme1: #f5f5f5;
+//背景主题颜色2（夜间模式）
+$background-color-sub-theme2: #444;
+
+
+//字体颜色规范(默认）
+//字体主题颜色默认（网易）
+$font-color-theme: #666;
+//字体主题颜色1(QQ)
+$font-color-theme1: #666;
+//字体主题颜色2(夜间模式）
+$font-color-theme2: #dad;
+
+
+//字体颜色规范（激活）
+//字体主题颜色默认（网易红)
+$font-active-color-theme: #d43c33;
+// 字体主题颜色1(QQ绿）
+$font-active-color-theme1: rgba(34, 213, 156, 1);
+// 宁体主题颜色2(夜间模式）
+$font-active-color-theme2: #ffcc33;
+
+//边框颜色
+//边框主题颜色默认（网易)
+$border-color-theme: #d43c33;
+//边框主题颜色1(QQ）
+$border-color-theme1: rgba(34, 213, 156, 1);
+//边框主题颜色2（夜间模式)
+$border-color-theme2: #ffcc33;
