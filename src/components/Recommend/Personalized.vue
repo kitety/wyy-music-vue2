@@ -45,8 +45,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/css/mixin';
-@import '../../assets/css/variable';
 
 .personalized {
   @include bg_sub_color();

@@ -58,7 +58,6 @@ export default {
 }
 </style>
 <style lang="scss">
-@import '../../assets/css/mixin';
 
 .banner {
   .swiper-pagination-bullet {

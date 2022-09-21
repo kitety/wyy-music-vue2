@@ -35,8 +35,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/css/mixin.scss';
-@import '../assets/css/variable.scss';
 
 .tabbar {
   width: 100%;

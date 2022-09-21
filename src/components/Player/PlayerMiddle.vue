@@ -54,8 +54,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/mixin';
-@import '@/assets/css/variable';
 
 .container {
   position: fixed;
@@ -121,7 +119,6 @@ export default {
 </style>
 
 <style lang="scss">
-@import '@/assets/css/mixin';
 
 .my-bullet {
   display: inline-block;
