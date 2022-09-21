@@ -45,6 +45,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  //position: relative;
+  //z-index: 100;
 
   .item {
     height: 84px;
