@@ -8,20 +8,21 @@
             <p>{{ modeTypeText[this.modeType] }}</p>
           </div>
           <div class="top-right">
-            <div class="del"></div>
+            <div class="del" @click="deleteAllSongs"></div>
           </div>
         </div>
         <div class="player-middle">
-          <ScrollView>
+          <ScrollView ref="ScrollView">
             <ul>
-              <li class="item">
+              <li v-for="(song) in songs" :key="song.id" class="item" @click="playSong(song.id)">
                 <div class="item-left">
-                  <div class="item-play"></div>
-                  <p>yanyuan</p>
+                  <div :class="{'item-active':currentSong.id===song.id}" class="item-play"></div>
+                  <p>{{ song.name }}</p>
                 </div>
                 <div class="item-right">
-                  <div class="item-favorite"></div>
-                  <div class="item-del"></div>
+                  <div :class="{active:favList.includes(song.id)}" class="item-favorite"
+                       @click="favorite(song.id)"></div>
+                  <div class="item-del" @click.stop="deleteSong(song.id)"></div>
                 </div>
               </li>
             </ul>
@@ -51,7 +52,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isPlaying', 'modeType', 'isShowListPlayer']),
+    ...mapGetters(['isPlaying', 'modeType', 'isShowListPlayer', 'songs', 'currentSong', 'favList']),
     modeClass: function () {
       return {
         loop: this.modeType === ModeType.loop,
@@ -62,10 +63,22 @@ export default {
 
   },
   methods: {
-    ...mapActions(['setModeType', 'setIsShowListPlayer']),
-
+    ...mapActions(['setModeType', 'setIsShowListPlayer', 'deleteSongById', 'setCurrentPlayId', 'setFavList']),
+    favorite (id) {
+      this.setFavList(id)
+    },
     hide () {
       this.setIsShowListPlayer(false)
+    },
+    deleteAllSongs () {
+      const ids = this.songs.map(item => item.id)
+      this.deleteSongById(ids)
+    },
+    deleteSong (id) {
+      this.deleteSongById(id)
+    },
+    playSong (id) {
+      this.setCurrentPlayId(id)
     },
     modeChange () {
       // this.setModeType(this.modeType)
@@ -84,6 +97,13 @@ export default {
           val = ModeType.loop
       }
       this.setModeType(val)
+    }
+  },
+  watch: {
+    isShowListPlayer (newVal) {
+      if (newVal) {
+        this.$refs.ScrollView.refresh()
+      }
     }
   }
 }
@@ -148,6 +168,9 @@ export default {
     }
 
     .player-middle {
+      height: 700px;
+      overflow: hidden;
+
       .item {
         height: 100px;
         display: flex;
@@ -168,6 +191,11 @@ export default {
             height: 56px;
             margin-right: 20px;
 
+            &.item-active {
+              background: url('@/assets/images/pause_red.png') no-repeat center;
+              background-size: 56px;
+            }
+
           }
 
           p {
@@ -182,11 +210,18 @@ export default {
           align-items: center;
 
           .item-favorite {
-            background: url('@/assets/images/like-active.png') no-repeat center;
+            background: url('@/assets/images/like.png') no-repeat center;
             background-size: 56px;
             width: 56px;
             height: 56px;
             margin-right: 20px;
+
+            &.active {
+              background: url('@/assets/images/like-active.png') no-repeat center;
+              background-size: 56px;
+              width: 56px;
+              height: 56px;
+            }
 
           }
 

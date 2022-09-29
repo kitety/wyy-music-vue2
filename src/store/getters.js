@@ -8,19 +8,22 @@ export default {
   isPlaying (state) {
     return state.isPlaying
   },
+  currentPlayId (state) {
+    return state.currentPlayId
+  },
   modeType (state) {
     return state.modeType
   },
   isShowListPlayer (state) {
     return state.isShowListPlayer
   },
-  songsDetail (state) {
-    return state.songsDetail
+  songs (state) {
+    return state.songs
   },
   currentSong (state) {
-    // console.log('currentSong', state.songsDetail?.length, state.currentIndex)
-    if (state.songsDetail?.length) {
-      return state.songsDetail[state.currentIndex]
+    const song = state.songs.find(item => item.id === state.currentPlayId)
+    if (song) {
+      return song
     }
     return {
       name: '',
@@ -31,6 +34,12 @@ export default {
 
   currentLyric (state) {
     return state.currentLyric
+  },
+  currentTime (state) {
+    return state.currentTime
+  },
+  favList (state) {
+    return state.favList
   }
 
 }

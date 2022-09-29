@@ -4,11 +4,11 @@
     <div v-show="this.isShowMini" class="mini-player">
       <div class="player-container">
         <div class="player-left" @click="showNormalPlayer">
-          <img :class="{'active':this.isPlaying}" alt=""
-               src="https://cdn.jsdelivr.net/gh/kitety/blog_img@master/img/2.jpg">
+          <img :class="{'active':this.isPlaying}" :src="currentSong.picUrl"
+               alt="">
           <div class="player-title">
-            <h3>演员</h3>
-            <p>薛之谦</p>
+            <h3>{{ currentSong.name }}</h3>
+            <p>{{ currentSong.singer }}</p>
           </div>
         </div>
         <div class="player-right">
@@ -40,7 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isShowMini', 'isPlaying'])
+    ...mapGetters(['isShowMini', 'isPlaying', 'currentSong'])
   }
 }
 </script>
@@ -86,7 +86,6 @@ export default {
       .player-title {
         display: flex;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
 
         h3 {
@@ -95,6 +94,7 @@ export default {
         }
 
         p {
+          margin-top: 10px;
           @include font_size($font_medium_s) ;
           @include font_color()
         }

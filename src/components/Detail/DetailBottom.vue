@@ -1,6 +1,6 @@
 <template>
   <ul class="container">
-    <li class="top">
+    <li class="top" @click="selectAll">
       <div class="icon"></div>
       <div class="title">播放全部</div>
     </li>
@@ -24,11 +24,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setFullScreen', 'setSongsDetail']),
+    ...mapActions(['setFullScreen', 'setSongsDetail', 'setCurrentPlayId']),
     selectMusic (id) {
       this.setFullScreen(true)
       this.setSongsDetail([id])
-      // this.$store.dispatch('setFullScreen', true)
+      this.setCurrentPlayId(id)
+    },
+    selectAll () {
+      const ids = this.playlist.map(item => item.id)
+      this.setSongsDetail(ids)
+      this.setFullScreen(true)
+      const firstSongId = ids[0]
+
+      if (firstSongId) {
+        this.setCurrentPlayId(firstSongId)
+      }
     }
   }
 }
@@ -57,7 +67,7 @@ export default {
     .icon {
       width: 60px;
       height: 60px;
-      background: url('@/assets/images/play.png') no-repeat center;
+      background: url('@/assets/images/play-red.png') no-repeat center;
       background-size: 60px 60px;
       margin-right: 20px;
     }

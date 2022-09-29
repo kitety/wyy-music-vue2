@@ -5,13 +5,13 @@
         <img v-if="currentSong" :src="currentSong.picUrl" alt="">
       </div>
       <p>{{ currentLyric[0]?.content }}</p>
-
     </swiper-slide>
-    <swiper-slide class="lyric">
-      <ScrollView>
+    <swiper-slide ref="lyric" class="lyric">
+      <ScrollView ref="scrollView">
         <ul>
-          <li v-for="(item,index) in currentLyric" :key="index">{{ item.content }}</li>
-
+          <li v-for="(item,index) in currentLyric" :key="index" :class="{'active':lineNumber===Math.floor(item.time)}">
+            {{ item.content }}
+          </li>
         </ul>
       </ScrollView>
     </swiper-slide>
@@ -32,6 +32,13 @@ export default {
     SwiperSlide,
     ScrollView
   },
+  props: {
+    currentTime: {
+      type: Number,
+      default: 0,
+      required: true
+    }
+  },
   data () {
     return {
       swiperOption: {
@@ -44,11 +51,52 @@ export default {
         observeParent: true,
         observeSlideChildren: true
 
-      }
+      },
+      lineNumber: 0
+
     }
   },
   computed: {
-    ...mapGetters(['isPlaying', 'currentSong', 'currentLyric'])
+    ...mapGetters(['isPlaying', 'currentSong', 'currentLyric', 'currentPlayId'])
+  },
+  watch: {
+    currentLyric (val) {
+      this.lineNumber = Math.floor(val[0].time)
+    },
+    currentTime (val) {
+      // 高亮歌词
+      let lineNumber = Math.floor(val)
+      lineNumber = this.getActiveLineNum(lineNumber)
+      const result = this.currentLyric.find(item => Math.floor(item.time) === lineNumber)
+      if (result?.content) {
+        this.lineNumber = lineNumber
+        // 滚动同步
+        const activeEle = document.querySelector('li.active')
+        if (!activeEle) return
+        const currentLyricTop = activeEle.offsetTop
+        const LyricHeight = this.$refs.lyric.$el.offsetHeight
+        const offsetVal = LyricHeight / 2 - currentLyricTop
+        if (offsetVal < 0) {
+          console.log('offsetVal', offsetVal)
+          this.$refs.scrollView.scrollTo(0, offsetVal, 100)
+        } else {
+          this.$refs.scrollView.scrollTo(0, 0, 100)
+        }
+      }
+    }
+  },
+  methods: {
+    getActiveLineNum (lineNumber) {
+      if (lineNumber < 0) {
+        return this.lineNumber
+      }
+      const result = this.currentLyric.find(item => Math.floor(item.time) === lineNumber)
+      if (!result) {
+        return this.getActiveLineNum(lineNumber - 1)
+      } else {
+        return lineNumber
+      }
+    }
   }
 }
 </script>
@@ -101,7 +149,13 @@ export default {
       margin: 10px 0;
 
       &:last-of-type {
-        padding-bottom: 100px;
+        padding-bottom: 50%;
+      }
+
+      &.active {
+        color: white;
+        transform: scale(1.1);
+        transition: all .6s linear;
       }
     }
   }

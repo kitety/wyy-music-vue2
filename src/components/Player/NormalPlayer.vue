@@ -3,8 +3,8 @@
     <div v-show="isFullScreen" class="normal-player">
       <div class="player-wrapper">
         <PlayerHeader></PlayerHeader>
-        <PlayerMiddle></PlayerMiddle>
-        <PlayerBottom></PlayerBottom>
+        <PlayerMiddle :currentTime="currentTime"></PlayerMiddle>
+        <PlayerBottom :currentTime="currentTime" :totalTime="totalTime"></PlayerBottom>
         <div class="player-bg"><img v-if="currentSong" :src="currentSong?.picUrl" alt="">
         </div>
       </div>
@@ -33,10 +33,22 @@ export default {
   methods: { ...mapActions(['setSongLyric']) },
   watch: {
     currentSong (newVal) {
-      console.log('currentSong', newVal?.id)
+      console.log('currentSong', newVal)
       if (newVal?.id) {
         this.setSongLyric(newVal?.id)
       }
+    }
+  },
+  props: {
+    totalTime: {
+      type: Number,
+      default: 0,
+      required: true
+    },
+    currentTime: {
+      type: Number,
+      default: 0,
+      required: true
     }
   }
 

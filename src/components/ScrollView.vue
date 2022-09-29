@@ -10,7 +10,7 @@ import IScroll from 'iscroll/build/iscroll-probe'
 export default {
   name: 'ScrollView',
   mounted () {
-    this.iscroll = new IScroll(this.$refs.wrapper, {
+    window.a = this.iscroll = new IScroll(this.$refs.wrapper, {
       mouseWheel: true,
       scrollbars: false,
       scrollX: false,
@@ -42,6 +42,14 @@ export default {
       this.iscroll.on('scroll', function () {
         fn && fn(this.y)
       })
+    },
+    refresh () {
+      setTimeout(() => {
+        this.iscroll.refresh()
+      })
+    },
+    scrollTo (x, y, time) {
+      this.iscroll.scrollTo(x, y, time)
     }
   }
 }

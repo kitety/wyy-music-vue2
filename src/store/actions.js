@@ -1,4 +1,8 @@
 import {
+  GET_CURRENT_TIME,
+  SET_CURRENT_SONG,
+  SET_DELETE_SONG,
+  SET_FAV_LIST,
   SET_IS_PLAYING,
   SET_IS_SHOW_LIST_PLAYER,
   SET_MODE_TYPE,
@@ -8,6 +12,7 @@ import {
   SET_SONGS_DETAIL
 } from '@/store/mutations-type'
 import { getSongDetail, getSongLyric, getSongUrl } from '@/api'
+import { parseLyric } from '@/store/utils'
 
 export default {
   setFullScreen ({ commit }, flag) {
@@ -26,7 +31,6 @@ export default {
     commit(SET_IS_SHOW_LIST_PLAYER, flag)
   },
   async setSongsDetail ({ commit }, ids) {
-    console.log('setSongsDetail', ids)
     const result = await getSongDetail(ids.join())
     const urls = await getSongUrl(ids.join())
     const data = result.songs.map(item => {
@@ -43,84 +47,18 @@ export default {
   },
   async setSongLyric ({ commit }, id) {
     const result = await getSongLyric(id)
-    // commit(SET_SONG_LYRIC, {})
     commit(SET_SONG_LYRIC, parseLyric(result.lrc.lyric))
+  },
+  deleteSongById ({ commit }, id) {
+    commit(SET_DELETE_SONG, id)
+  },
+  setCurrentPlayId ({ commit }, id) {
+    commit(SET_CURRENT_SONG, id)
+  },
+  setCurrentTime ({ commit }, id) {
+    commit(GET_CURRENT_TIME, id)
+  },
+  setFavList ({ commit }, list) {
+    commit(SET_FAV_LIST, list)
   }
-}
-const extractLrcRegex =
-  /^(?<lyricTimestamps>(?:\[.+?\])+)(?!\[)(?<content>.+)$/gm
-const extractTimestampRegex =
-  /\[(?<min>\d+):(?<sec>\d+)(?:\.|:)*(?<ms>\d+)*\]/g
-
-function parseLyric (lrc) {
-  console.log('lrc', lrc)
-  // return {}
-  /**
-   * A sorted list of parsed lyric and its timestamp.
-   *
-   * @type {ParsedLyric[]}
-   * @see binarySearch
-   */
-  const parsedLyrics = []
-
-  /**
-   * Find the appropriate index to push our parsed lyric.
-   * @param {ParsedLyric} lyric
-   */
-  const binarySearch = lyric => {
-    const time = lyric.time
-
-    let low = 0
-    let high = parsedLyrics.length - 1
-
-    while (low <= high) {
-      const mid = Math.floor((low + high) / 2)
-      const midTime = parsedLyrics[mid].time
-      if (midTime === time) {
-        return mid
-      } else if (midTime < time) {
-        low = mid + 1
-      } else {
-        high = mid - 1
-      }
-    }
-
-    return low
-  }
-
-  for (const line of lrc.trim().matchAll(extractLrcRegex)) {
-    const {
-      lyricTimestamps,
-      content
-    } = line.groups
-
-    for (const timestamp of lyricTimestamps.matchAll(extractTimestampRegex)) {
-      const {
-        min,
-        sec,
-        ms
-      } = timestamp.groups
-      const rawTime = timestamp[0]
-      const time = Number(min) * 60 + Number(sec) + Number(ms ?? 0) * 0.001
-
-      /** @type {ParsedLyric} */
-      const parsedLyric = {
-        rawTime,
-        time,
-        content: trimContent(content)
-      }
-      parsedLyrics.splice(binarySearch(parsedLyric), 0, parsedLyric)
-    }
-  }
-
-  return parsedLyrics
-}
-
-/**
- * @param {string} content
- * @returns {string}
- */
-function trimContent (content) {
-  const t = content.trim()
-  return t.length < 1 ? content : t
 }
