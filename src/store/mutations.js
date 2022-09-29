@@ -3,6 +3,7 @@ import {
   SET_CURRENT_SONG,
   SET_DELETE_SONG,
   SET_FAV_LIST,
+  SET_FAV_LIST_FROM_LOCAL,
   SET_IS_PLAYING,
   SET_IS_SHOW_LIST_PLAYER,
   SET_MODE_TYPE,
@@ -66,5 +67,8 @@ export default {
     } else {
       state.favList = state.favList.filter(item => item !== val)
     }
+  },
+  [SET_FAV_LIST_FROM_LOCAL] (state, list) {
+    state.favList = list
   }
 }

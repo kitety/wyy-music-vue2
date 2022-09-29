@@ -24,10 +24,13 @@ export default {
   },
   computed: {
     ...mapGetters(
-      ['currentSong', 'isPlaying', 'currentPlayId', 'currentTime', 'modeType', 'songs']
+      ['currentSong', 'isPlaying', 'currentPlayId', 'currentTime', 'modeType', 'songs', 'favList']
     )
   },
   watch: {
+    favList (val) {
+      localStorage.setItem('favList', JSON.stringify(val))
+    },
     isPlaying (newVal) {
       if (newVal) {
         this.$refs.audio.play()
@@ -52,8 +55,15 @@ export default {
       }
     }
   },
+  created () {
+    try {
+      const favList = JSON.parse(localStorage.getItem('favList'))
+      this.setFavListFromLocal(favList || [])
+    } catch {
+    }
+  },
   methods: {
-    ...mapActions(['setCurrentPlayId']),
+    ...mapActions(['setCurrentPlayId', 'setFavListFromLocal']),
     timeUpdate (e) {
       this.currentPlayingTime = e.target.currentTime
     },

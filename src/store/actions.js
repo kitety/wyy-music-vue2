@@ -3,6 +3,7 @@ import {
   SET_CURRENT_SONG,
   SET_DELETE_SONG,
   SET_FAV_LIST,
+  SET_FAV_LIST_FROM_LOCAL,
   SET_IS_PLAYING,
   SET_IS_SHOW_LIST_PLAYER,
   SET_MODE_TYPE,
@@ -60,5 +61,8 @@ export default {
   },
   setFavList ({ commit }, list) {
     commit(SET_FAV_LIST, list)
+  },
+  setFavListFromLocal ({ commit }, list) {
+    commit(SET_FAV_LIST_FROM_LOCAL, list)
   }
 }
