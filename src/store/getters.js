@@ -40,6 +40,10 @@ export default {
   },
   favList (state) {
     return state.favList
+  },
+  historyList (state) {
+    console.log('getter', state.historyList)
+    return state.historyList
   }
 
 }

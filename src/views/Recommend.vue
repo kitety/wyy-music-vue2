@@ -50,7 +50,13 @@ export default {
     const albumNewestData = await getAlbumLNewest()
     this.albumNewest = albumNewestData?.albums.slice(0, 6) || []
     const newSongData = await getNewSong()
-    this.songs = newSongData?.result || []
+    this.songs = newSongData?.result.map(item => ({
+      url: '',
+      id: item.id,
+      name: item.song.name,
+      singer: item.song.artists.map(d => d.name).join('/'),
+      picUrl: item.picUrl
+    })) || []
   },
   methods: {
     fatherSelectItem (id, type) {
@@ -78,34 +84,4 @@ export default {
   }
 }
 
-.v-enter {
-  opacity: 0;
-  transform: translateX(100%);
-}
-
-.v-enter-to {
-  opacity: 1;
-
-  transform: translateX(0);
-}
-
-.v-enter-active {
-  transition: all .3s;
-}
-
-.v-leave {
-  opacity: 1;
-
-  transform: translateX(0);
-}
-
-.v-leave-to {
-  opacity: 0;
-
-  transform: translateX(100%);
-}
-
-.v-leave-active {
-  transition: all .3s;
-}
 </style>

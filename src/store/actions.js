@@ -4,6 +4,8 @@ import {
   SET_DELETE_SONG,
   SET_FAV_LIST,
   SET_FAV_LIST_FROM_LOCAL,
+  SET_HISTORY_LIST,
+  SET_HISTORY_SONG,
   SET_IS_PLAYING,
   SET_IS_SHOW_LIST_PLAYER,
   SET_MODE_TYPE,
@@ -12,8 +14,8 @@ import {
   SET_SONG_LYRIC,
   SET_SONGS_DETAIL
 } from '@/store/mutations-type'
-import { getSongDetail, getSongLyric, getSongUrl } from '@/api'
-import { parseLyric } from '@/store/utils'
+import { getSongLyric } from '@/api'
+import { formatGetSongsByIds, parseLyric } from '@/store/utils'
 
 export default {
   setFullScreen ({ commit }, flag) {
@@ -32,18 +34,7 @@ export default {
     commit(SET_IS_SHOW_LIST_PLAYER, flag)
   },
   async setSongsDetail ({ commit }, ids) {
-    const result = await getSongDetail(ids.join())
-    const urls = await getSongUrl(ids.join())
-    const data = result.songs.map(item => {
-      const url = urls.data.find(urlData => urlData.id === item.id)?.url || ''
-      return {
-        url,
-        id: item.id,
-        name: item.name,
-        singer: item.ar.map(i => i.name).join('/'),
-        picUrl: item.al.picUrl
-      }
-    })
+    const data = await formatGetSongsByIds(ids)
     commit(SET_SONGS_DETAIL, data)
   },
   async setSongLyric ({ commit }, id) {
@@ -64,5 +55,11 @@ export default {
   },
   setFavListFromLocal ({ commit }, list) {
     commit(SET_FAV_LIST_FROM_LOCAL, list)
+  },
+  setHistorySong ({ commit }, id) {
+    commit(SET_HISTORY_SONG, id)
+  },
+  setHistoryList ({ commit }, list) {
+    commit(SET_HISTORY_LIST, list)
   }
 }

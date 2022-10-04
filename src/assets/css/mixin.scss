@@ -80,3 +80,9 @@
     border-color: $border-color-theme2;
   }
 }
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

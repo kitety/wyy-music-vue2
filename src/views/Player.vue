@@ -24,15 +24,19 @@ export default {
   },
   computed: {
     ...mapGetters(
-      ['currentSong', 'isPlaying', 'currentPlayId', 'currentTime', 'modeType', 'songs', 'favList']
+      ['currentSong', 'isPlaying', 'currentPlayId', 'currentTime', 'modeType', 'songs', 'favList', 'historyList']
     )
   },
   watch: {
     favList (val) {
       localStorage.setItem('favList', JSON.stringify(val))
     },
+    historyList (val) {
+      localStorage.setItem('historyList', JSON.stringify(val))
+    },
     isPlaying (newVal) {
       if (newVal) {
+        this.setHistorySong(this.currentPlayId)
         this.$refs.audio.play()
       } else {
         this.$refs.audio.pause()
@@ -43,11 +47,11 @@ export default {
       this.$refs.audio.currentTime = val
       this.$refs.audio.play()
     },
-    currentPlayId () {
-      this.$refs.audio.oncanplay = () => {
+    currentPlayId (val) {
+      this.$refs.audio.ondurationchange = () => {
         this.totalTime = this.$refs.audio.duration
-        console.log(111, this.totalTime)
         if (this.isPlaying) {
+          this.setHistorySong(val)
           this.$refs.audio.play()
         } else {
           this.$refs.audio.pause()
@@ -55,15 +59,9 @@ export default {
       }
     }
   },
-  created () {
-    try {
-      const favList = JSON.parse(localStorage.getItem('favList'))
-      this.setFavListFromLocal(favList || [])
-    } catch {
-    }
-  },
+
   methods: {
-    ...mapActions(['setCurrentPlayId', 'setFavListFromLocal']),
+    ...mapActions(['setCurrentPlayId', 'setFavListFromLocal', 'setHistoryList', 'setHistorySong']),
     timeUpdate (e) {
       this.currentPlayingTime = e.target.currentTime
     },

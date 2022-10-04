@@ -11,5 +11,6 @@ export default {
   currentPlayId: 0,
   currentLyric: [],
   currentTime: 0,
-  favList: []
+  favList: [],
+  historyList: []
 }

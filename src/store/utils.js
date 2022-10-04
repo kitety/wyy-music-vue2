@@ -1,3 +1,5 @@
+import { getSongDetail, getSongUrl } from '@/api'
+
 const extractLrcRegex =
   /^(?<lyricTimestamps>(?:\[.+?\])+)(?!\[)(?<content>.+)$/gm
 const extractTimestampRegex =
@@ -74,4 +76,20 @@ export function parseLyric (lrc) {
 function trimContent (content) {
   const t = content.trim()
   return t.length < 1 ? content : t
+}
+
+export async function formatGetSongsByIds (ids) {
+  const result = await getSongDetail(ids.join())
+  const urls = await getSongUrl(ids.join())
+  const data = result.songs.map(item => {
+    const url = urls.data.find(urlData => urlData.id === item.id)?.url || ''
+    return {
+      url,
+      id: item.id,
+      name: item.name,
+      singer: item.ar.map(i => i.name).join('/'),
+      picUrl: item.al.picUrl
+    }
+  })
+  return data
 }

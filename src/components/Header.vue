@@ -2,7 +2,7 @@
   <div class="header" @click="changeTheme">
     <div class="left"></div>
     <div class="title">K音乐</div>
-    <div class="right"></div>
+    <div class="right" @click.stop="accountClick"></div>
   </div>
 </template>
 
@@ -22,6 +22,9 @@ export default {
         this.index = 0
       }
       document.documentElement.setAttribute('data-theme', this.theme[this.index])
+    },
+    accountClick () {
+      this.$router.push('/account')
     }
   }
 }

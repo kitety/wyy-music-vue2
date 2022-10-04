@@ -19,3 +19,36 @@ body {
 img {
   vertical-align: bottom;
 }
+
+//transition
+
+.v-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.v-enter-to {
+  opacity: 1;
+
+  transform: translateX(0);
+}
+
+.v-enter-active {
+  transition: all .3s;
+}
+
+.v-leave {
+  opacity: 1;
+
+  transform: translateX(0);
+}
+
+.v-leave-to {
+  opacity: 0;
+
+  transform: translateX(100%);
+}
+
+.v-leave-active {
+  transition: all .3s;
+}

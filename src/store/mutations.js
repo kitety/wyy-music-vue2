@@ -4,6 +4,8 @@ import {
   SET_DELETE_SONG,
   SET_FAV_LIST,
   SET_FAV_LIST_FROM_LOCAL,
+  SET_HISTORY_LIST,
+  SET_HISTORY_SONG,
   SET_IS_PLAYING,
   SET_IS_SHOW_LIST_PLAYER,
   SET_MODE_TYPE,
@@ -61,7 +63,6 @@ export default {
     state.currentTime = val
   },
   [SET_FAV_LIST] (state, val) {
-    console.log(val)
     if (!state.favList.includes(val)) {
       state.favList.push(val)
     } else {
@@ -70,5 +71,16 @@ export default {
   },
   [SET_FAV_LIST_FROM_LOCAL] (state, list) {
     state.favList = list
+  },
+  [SET_HISTORY_SONG] (state, val) {
+    if (!state.historyList.includes(val)) {
+      if (state.historyList.length > 30) {
+        state.historyList.pop()
+      }
+      state.historyList.push(val)
+    }
+  },
+  [SET_HISTORY_LIST] (state, list) {
+    state.historyList = list
   }
 }
