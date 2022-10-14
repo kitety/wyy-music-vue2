@@ -17,7 +17,11 @@ const routes = [
     }]
   }, {
     path: '/singer',
-    component: () => import('@/views/Singer')
+    component: () => import('@/views/Singer'),
+    children: [{
+      path: 'detail/:id/:type',
+      component: () => import('@/views/Detail')
+    }]
   }, {
     path: '/rank',
     component: () => import('@/views/Rank')

@@ -5,7 +5,8 @@
         <li v-for="(value,index) in alphabet" :key="index" ref="group" class="list-group">
           <h2 class="group-title">{{ value }}</h2>
           <ul>
-            <li v-for="(singer,i) in singers[index]" :key="`${singer.name}-${i}`" class="group-item">
+            <li v-for="(singer,i) in singers[index]" :key="`${singer.name}-${i}`" class="group-item"
+                @click.stop="switchSinger(singer.id)">
               <img v-lazy="singer.picUrl" alt="">
               <p> {{ singer.name }}</p>
             </li>
@@ -26,8 +27,12 @@
         <!--          {{ value }}-->
         <!--        </li>-->
       </ul>
-      <div v-show="fixedTitle" class="fixed-title">{{ fixedTitle }}</div>
     </ScrollView>
+    <div v-show="fixedTitle" ref="fixedTitle" class="fixed-title">{{ fixedTitle }}</div>
+
+    <transition>
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -49,7 +54,9 @@ export default {
       beginOffsetY: 0,
       moveOffsetY: 0,
       isClick: false,
-      scrollY: 0
+      scrollY: 0,
+      fixedHeight: 0,
+      fixedOffsetY: 0
     }
   },
   watch: {
@@ -58,6 +65,11 @@ export default {
         const groupData = this.$refs.group.map(ele => ele.offsetTop)
         this.groupsTop = groupData
         console.log(groupData)
+      })
+    },
+    fixedTitle () {
+      this.$nextTick(() => {
+        this.fixedHeight = this.$refs.fixedTitle.offsetHeight
       })
     }
   },
@@ -97,13 +109,29 @@ export default {
         return item <= value && value <= this.groupsTop[index + 1]
       })
       if (index >= 0) {
+        // 这里的范围 [0,this.groupsTop.length - 1)
         this.activeIndex = index
+        // 用下一组的偏移+滚动出去的偏移
+        const diffOffsetY = this.groupsTop[index + 1] + y
+        // 判断范围是不是[0,fixedHeight]
+        let fixedOffsetY = 0
+        if (diffOffsetY >= 0 && diffOffsetY <= this.fixedHeight) {
+          // 需要移动
+          fixedOffsetY = diffOffsetY - this.fixedHeight
+        }
+        if (this.fixedOffsetY !== fixedOffsetY) {
+          this.fixedOffsetY = fixedOffsetY
+          this.$refs.fixedTitle.style.transform = `translateY(${fixedOffsetY}px)`
+        }
       } else {
         this.activeIndex = this.groupsTop.length - 1
       }
     })
   },
   methods: {
+    switchSinger (id) {
+      this.$router.push(`singer/detail/${id}/singer`)
+    },
     _clickKey (index) {
       console.log(index)
       this.activeIndex = index

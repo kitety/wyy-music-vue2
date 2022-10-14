@@ -12,7 +12,7 @@
 
 <script>
 import SubHeader from '@/components/Detail/SubHeader'
-import { getAlbum, getPlayListDetailById } from '@/api'
+import { getAlbum, getArtistSongs, getPlayListDetailById } from '@/api'
 import DetailTop from '@/components/Detail/DetailTop'
 import DetailBottom from '@/components/Detail/DetailBottom'
 import ScrollView from '@/components/ScrollView'
@@ -44,11 +44,23 @@ export default {
       this.playList = detailRes?.playlist || []
       return
     }
-    const detailRes = await getAlbum(id)
-    this.playList = {
-      name: detailRes.album.name,
-      coverImgUrl: detailRes.album.picUrl,
-      tracks: detailRes.songs
+    if (type === 'album') {
+      const detailRes = await getAlbum(id)
+      this.playList = {
+        name: detailRes.album.name,
+        coverImgUrl: detailRes.album.picUrl,
+        tracks: detailRes.songs
+      }
+      return
+    }
+    if (type === 'singer') {
+      const detailRes = await getArtistSongs(id)
+      console.log(detailRes, 'detailRes')
+      this.playList = {
+        name: detailRes.artist.name,
+        coverImgUrl: detailRes.artist.img1v1Url,
+        tracks: detailRes.hotSongs
+      }
     }
   },
   mounted () {

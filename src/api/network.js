@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: process.env.NODE_ENV === 'production' ? 'https://ncmp-kitety.vercel.app' : 'http://localhost:3000',
   timeout: 3000
 })
 axiosInstance.interceptors.response.use(

@@ -38,3 +38,4 @@ export const getSingAllLetters = async () => {
     singers
   }
 }
+export const getArtistSongs = (id) => axiosInstance.get(`/artists?id=${id}`)
